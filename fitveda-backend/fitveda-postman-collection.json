@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "fitveda-api-collection",
+		"name": "FitVeda API Contract (Phase 1 & 2)",
+		"description": "Complete API Contract and Endpoint Specifications for FitVeda Platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "1. Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Adarsh Trainer\",\n  \"email\": \"trainer@fitveda.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"TRAINER\"\n}"
+						},
+						"url": { "raw": "http://localhost:8080/api/auth/register", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "auth", "register"] }
+					}
+				},
+				{
+					"name": "2. Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"trainer@fitveda.com\",\n  \"password\": \"Password123!\"\n}"
+						},
+						"url": { "raw": "http://localhost:8080/api/auth/login", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "auth", "login"] }
+					}
+				}
+			]
+		},
+		{
+			"name": "Trainer Operations",
+			"item": [
+				{
+					"name": "3. Create Plan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"4-Week Strength & Fat Loss\",\n  \"startDate\": \"2026-08-01\",\n  \"endDate\": \"2026-08-28\"\n}"
+						},
+						"url": { "raw": "http://localhost:8080/api/plans", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "plans"] }
+					}
+				},
+				{
+					"name": "4. Add Exercise to Plan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"dayNumber\": 1,\n  \"type\": \"WORKOUT\",\n  \"name\": \"Barbell Squats\",\n  \"sets\": 4,\n  \"reps\": \"12 reps\"\n}"
+						},
+						"url": { "raw": "http://localhost:8080/api/plans/1/exercises", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "plans", "1", "exercises"] }
+					}
+				},
+				{
+					"name": "5. Assign Plan to Client",
+					"request": {
+						"method": "PUT",
+						"url": { "raw": "http://localhost:8080/api/plans/1/assign/2", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "plans", "1", "assign", "2"] }
+					}
+				},
+				{
+					"name": "6. Get Trainer Clients",
+					"request": {
+						"method": "GET",
+						"url": { "raw": "http://localhost:8080/api/clients", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "clients"] }
+					}
+				},
+				{
+					"name": "7. Get Client Progress Analytics",
+					"request": {
+						"method": "GET",
+						"url": { "raw": "http://localhost:8080/api/clients/2/progress", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "clients", "2", "progress"] }
+					}
+				}
+			]
+		},
+		{
+			"name": "Client Operations",
+			"item": [
+				{
+					"name": "8. Get Client Active Daily Plan",
+					"request": {
+						"method": "GET",
+						"url": { "raw": "http://localhost:8080/api/plans/my-plan", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "plans", "my-plan"] }
+					}
+				},
+				{
+					"name": "9. Log Exercise Progress",
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"exerciseId\": 1,\n  \"status\": \"COMPLETED\",\n  \"notes\": \"Completed 4 sets smoothly\"\n}"
+						},
+						"url": { "raw": "http://localhost:8080/api/progress", "protocol": "http", "host": ["localhost"], "port": "8080", "path": ["api", "progress"] }
+					}
+				}
+			]
+		}
+	]
+}
