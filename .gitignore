@@ -1,0 +1,7 @@
+node_modules/
+dist/
+fitveda_frotend2/node_modules/
+fitveda_frotend2/dist/
+.idea/
+.vscode/
+*.log
