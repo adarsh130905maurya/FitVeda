@@ -35,17 +35,34 @@ api.interceptors.response.use(
 
 export default api;
 
+// Helper to get active user ID or fallback for Phase 2 dev profile
+const getActiveUserId = (fallbackId = 1) => {
+  return localStorage.getItem('userId') || fallbackId;
+};
+
 // ==================== AUTH API ====================
 export const register = (data) => api.post('/auth/register', data);
 export const login = (data) => api.post('/auth/login', data);
 
 // ==================== TRAINER PLAN & CLIENT API ====================
-export const createPlan = (data) => api.post('/plans', data);
-export const addExercise = (planId, data) => api.post(`/plans/${planId}/exercises`, data);
-export const assignClient = (planId, clientId) => api.put(`/plans/${planId}/assign/${clientId}`);
-export const getClients = () => api.get('/clients');
-export const getClientProgress = (clientId) => api.get(`/clients/${clientId}/progress`);
+export const createPlan = (data, trainerId = getActiveUserId(1)) =>
+  api.post('/plans', data, { params: { trainerId } });
+
+export const addExercise = (planId, data, trainerId = getActiveUserId(1)) =>
+  api.post(`/plans/${planId}/exercises`, data, { params: { trainerId } });
+
+export const assignClient = (planId, clientId, trainerId = getActiveUserId(1)) =>
+  api.put(`/plans/${planId}/assign/${clientId}`, null, { params: { trainerId } });
+
+export const getClients = (trainerId = getActiveUserId(1)) =>
+  api.get('/clients', { params: { trainerId } });
+
+export const getClientProgress = (clientId, trainerId = getActiveUserId(1)) =>
+  api.get(`/clients/${clientId}/progress`, { params: { trainerId } });
 
 // ==================== CLIENT PLAN & PROGRESS API ====================
-export const getMyPlan = () => api.get('/plans/my-plan');
-export const submitProgress = (data) => api.post('/progress', data);
+export const getMyPlan = (clientId = getActiveUserId(2)) =>
+  api.get('/plans/my-plan', { params: { clientId } });
+
+export const submitProgress = (data, clientId = getActiveUserId(2)) =>
+  api.post('/progress', data, { params: { clientId } });
