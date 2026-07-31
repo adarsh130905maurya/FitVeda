@@ -5,6 +5,7 @@ import com.fitveda.dto.LoginRequest;
 import com.fitveda.dto.RegisterRequest;
 import com.fitveda.model.User;
 import com.fitveda.repository.UserRepository;
+import com.fitveda.security.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     public User registerUser(RegisterRequest req) {
@@ -39,9 +42,10 @@ public class UserService {
             throw new IllegalArgumentException("Invalid email or password");
         }
 
-        // Return dev token (Full JWT token generation is wired in Phase 3)
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name(), user.getId(), user.getName());
+
         return new AuthResponse(
-                "dev-token-" + user.getId(),
+                token,
                 user.getRole().name(),
                 user.getId(),
                 user.getName()
