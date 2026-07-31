@@ -15,6 +15,7 @@ const ClientDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState(null); // { message, type }
+  const [cooldown, setCooldown] = useState(0);
   
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-US', {
@@ -32,6 +33,23 @@ const ClientDashboard = () => {
   };
 
   const todayStr = getLocalDateString();
+
+  // Handle global toasts (e.g. 429 rate limits)
+  useEffect(() => {
+    const handleGlobalToast = (e) => {
+      setToast(e.detail);
+    };
+    window.addEventListener('fitveda-toast', handleGlobalToast);
+    return () => window.removeEventListener('fitveda-toast', handleGlobalToast);
+  }, []);
+
+  // Handle 10-second button cooldown on rate limit
+  useEffect(() => {
+    if (cooldown > 0) {
+      const timer = setTimeout(() => setCooldown(cooldown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [cooldown]);
 
   // Fetch plan on mount
   useEffect(() => {
@@ -98,6 +116,9 @@ const ClientDashboard = () => {
         type: 'success'
       });
     } catch (err) {
+      if (err.response?.status === 429) {
+        setCooldown(10);
+      }
       setToast({
         message: err.response?.data?.error || 'Failed to log progress. Please try again.',
         type: 'error'
@@ -253,10 +274,10 @@ const ClientDashboard = () => {
               <Button
                 onClick={handleSubmit}
                 loading={submitting}
-                disabled={!isAnyChecked || submitting}
+                disabled={!isAnyChecked || submitting || cooldown > 0}
                 className="w-full py-4 text-base font-bold shadow-lg shadow-blue-500/10 cursor-pointer"
               >
-                Log Today's Progress
+                {cooldown > 0 ? `Please wait (${cooldown}s)` : "Log Today's Progress"}
               </Button>
             </div>
           </div>

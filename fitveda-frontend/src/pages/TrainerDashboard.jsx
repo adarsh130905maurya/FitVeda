@@ -5,6 +5,7 @@ import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
 import { mockClients, mockPlan } from '../utils/mockData';
+import ProgressChart from '../components/ProgressChart';
 
 const TrainerDashboard = () => {
   const { user, logout } = useAuth();
@@ -209,16 +210,16 @@ const TrainerDashboard = () => {
           </Card>
         ) : null}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {/* Client Grid */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 xl:col-span-3">
             <h2 className="text-xl font-bold text-slate-800 mb-6">Assigned Clients</h2>
             {clients.length === 0 ? (
               <Card className="text-center py-12 border-dashed border-2">
                 <p className="text-slate-400 font-medium">No clients registered under your trainer profile yet.</p>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {clients.map((client) => (
                   <Card key={client.id} hoverEffect className="flex flex-col justify-between">
                     <div>
@@ -266,44 +267,8 @@ const TrainerDashboard = () => {
                 </div>
 
                 {/* Progress Indicators */}
-                <div className="flex flex-col gap-5">
-                  <div className="flex flex-col gap-2">
-                    <div className="flex justify-between text-xs font-bold text-slate-600">
-                      <span>Total Exercises Completed</span>
-                      <span className="text-green-600">83%</span>
-                    </div>
-                    <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                      <div className="bg-gradient-to-r from-green-500 to-emerald-500 h-full rounded-full" style={{ width: '83%' }} />
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <div className="flex justify-between text-xs font-bold text-slate-600">
-                      <span>Diet Plan Adherence</span>
-                      <span className="text-blue-600">100%</span>
-                    </div>
-                    <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                      <div className="bg-gradient-to-r from-blue-500 to-indigo-500 h-full rounded-full" style={{ width: '100%' }} />
-                    </div>
-                  </div>
-
-                  <div className="mt-4 pt-4 border-t border-slate-100">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Daily Progress History</h4>
-                    <div className="flex flex-col gap-2">
-                      <div className="flex justify-between text-sm font-semibold">
-                        <span className="text-slate-500">Wednesday, 29 Jul</span>
-                        <Badge variant="COMPLETED">100%</Badge>
-                      </div>
-                      <div className="flex justify-between text-sm font-semibold">
-                        <span className="text-slate-500">Tuesday, 28 Jul</span>
-                        <Badge variant="COMPLETED">67%</Badge>
-                      </div>
-                      <div className="flex justify-between text-sm font-semibold">
-                        <span className="text-slate-500">Monday, 27 Jul</span>
-                        <Badge variant="MISSED">33%</Badge>
-                      </div>
-                    </div>
-                  </div>
+                <div className="mt-4">
+                  <ProgressChart clientId={selectedClient.id} />
                 </div>
               </Card>
             ) : (

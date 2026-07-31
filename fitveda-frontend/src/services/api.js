@@ -27,6 +27,12 @@ api.interceptors.response.use(
       localStorage.clear();
       window.location.href = '/';
     }
+    if (error.response?.status === 429) {
+      const event = new CustomEvent('fitveda-toast', {
+        detail: { message: 'Too many requests — please slow down.', type: 'warning' }
+      });
+      window.dispatchEvent(event);
+    }
     return Promise.reject(error);
   }
 );
