@@ -34,3 +34,18 @@ api.interceptors.response.use(
 );
 
 export default api;
+
+// ==================== AUTH API ====================
+export const register = (data) => api.post('/auth/register', data);
+export const login = (data) => api.post('/auth/login', data);
+
+// ==================== TRAINER PLAN & CLIENT API ====================
+export const createPlan = (data) => api.post('/plans', data);
+export const addExercise = (planId, data) => api.post(`/plans/${planId}/exercises`, data);
+export const assignClient = (planId, clientId) => api.put(`/plans/${planId}/assign/${clientId}`);
+export const getClients = () => api.get('/clients');
+export const getClientProgress = (clientId) => api.get(`/clients/${clientId}/progress`);
+
+// ==================== CLIENT PLAN & PROGRESS API ====================
+export const getMyPlan = () => api.get('/plans/my-plan');
+export const submitProgress = (data) => api.post('/progress', data);
