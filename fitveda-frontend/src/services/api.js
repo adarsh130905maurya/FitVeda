@@ -38,12 +38,13 @@ export const register = (data) => api.post('/auth/register', data);
 export const login = (data) => api.post('/auth/login', data);
 
 // Plans (Trainer)
-export const createPlan = (data) => api.post('/plans', data);
-export const addExercise = (planId, data) => api.post(`/plans/${planId}/exercises`, data);
-export const assignClient = (planId, clientId) => api.put(`/plans/${planId}/assign/${clientId}`);
-export const getClients = () => api.get('/clients');
-export const getMyPlan = () => api.get('/plans/my-plan');
+export const createPlan = (data, trainerId) => api.post('/plans', data, { params: { trainerId } });
+export const addExercise = (planId, data, trainerId) => api.post(`/plans/${planId}/exercises`, data, { params: { trainerId } });
+export const assignClient = (planId, clientId, trainerId) => api.put(`/plans/${planId}/assign/${clientId}`, null, { params: { trainerId } });
+export const getClients = (trainerId) => api.get('/clients', { params: { trainerId } });
+export const getMyPlan = (clientId) => api.get('/plans/my-plan', { params: { clientId } });
 
 // Progress
-export const submitProgress = (data) => api.post('/progress', data);
-export const getClientProgress = (clientId) => api.get(`/clients/${clientId}/progress`);
+export const submitProgress = (data, clientId) => api.post('/progress', data, { params: { clientId } });
+export const getClientProgress = (clientId, trainerId) => api.get(`/clients/${clientId}/progress`, { params: { trainerId } });
+

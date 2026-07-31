@@ -38,7 +38,7 @@ const ClientDashboard = () => {
     const fetchPlan = async () => {
       try {
         setLoading(true);
-        const response = await getMyPlan();
+        const response = await getMyPlan(user?.userId);
         if (response.data && response.data.id) {
           setPlan(response.data);
           
@@ -88,7 +88,7 @@ const ClientDashboard = () => {
           exerciseId: ex.id,
           status: isChecked ? 'COMPLETED' : 'MISSED',
           notes: isChecked ? 'Logged completed via client checklist' : 'Missed exercise'
-        });
+        }, user?.userId);
       });
 
       await Promise.all(logPromises);
