@@ -21,13 +21,20 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor — handles global 401 unauthorized error
+// Response interceptor — handles global 401 & 429 errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
       localStorage.clear();
       window.location.href = '/'; // Force re-login on 401
+    }
+    if (error.response?.status === 429) {
+      console.warn('Rate limit exceeded (429).');
+      // Return clear rate limit error message to caller
+      if (!error.response.data) {
+        error.response.data = { error: 'Too many requests. Please slow down and try again.' };
+      }
     }
     return Promise.reject(error);
   }

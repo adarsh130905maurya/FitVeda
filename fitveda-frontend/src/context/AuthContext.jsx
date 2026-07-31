@@ -2,6 +2,23 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(null);
 
+// Helper to decode JWT token payload safely
+const parseJwt = (token) => {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return null;
+  }
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
@@ -12,18 +29,26 @@ export const AuthProvider = ({ children }) => {
     const storedUserId = localStorage.getItem('userId');
     const storedName = localStorage.getItem('name');
 
-    if (storedToken && storedRole && storedUserId) {
+    if (storedToken) {
+      // Validate JWT expiry
+      const decoded = parseJwt(storedToken);
+      if (decoded && decoded.exp && decoded.exp * 1000 < Date.now()) {
+        console.warn('JWT token expired. Clearing session.');
+        logout();
+        return;
+      }
+
       setToken(storedToken);
       setUser({
-        id: storedUserId,
-        role: storedRole,
-        name: storedName || '',
+        id: storedUserId || '1',
+        role: storedRole || 'TRAINER',
+        name: storedName || 'User',
       });
     }
   }, []);
 
   const login = (authData) => {
-    // authData expected: { token, role, userId, name }
+    // authData: { token, role, userId, name }
     localStorage.setItem('token', authData.token);
     localStorage.setItem('role', authData.role);
     localStorage.setItem('userId', authData.userId);
