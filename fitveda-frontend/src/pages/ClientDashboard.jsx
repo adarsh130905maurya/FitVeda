@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import NavBar from '../components/ui/NavBar';
+import Footer from '../components/ui/Footer';
 import { getMyPlan, submitProgress } from '../services/api';
 import { mockClientPlan } from '../utils/mockData';
 import { formatDate, getTodayDateString } from '../utils/helpers';
@@ -271,6 +272,7 @@ const ClientDashboard = () => {
         </div>
       )}
       </div>
+      <Footer />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import NavBar from '../components/ui/NavBar';
+import Footer from '../components/ui/Footer';
 import { getClients, createPlan, addExercise, assignClient, getClientProgress } from '../services/api';
 import { mockTrainerClients } from '../utils/mockData';
 
@@ -458,9 +459,9 @@ const TrainerDashboard = () => {
           </section>
         </div>
       </div>
+      <Footer />
     </div>
-  </div>
-);
+  );
 };
 
 export default TrainerDashboard;
