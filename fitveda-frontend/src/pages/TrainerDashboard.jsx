@@ -459,6 +459,7 @@ const TrainerDashboard = () => {
           </section>
         </div>
       </div>
+      </div>
       <Footer />
     </div>
   );
