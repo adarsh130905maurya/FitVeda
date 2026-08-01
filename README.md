@@ -43,7 +43,7 @@ docker run -d --name fitveda-postgres -e POSTGRES_DB=fitveda_db -e POSTGRES_PASS
 cd fitveda-backend
 mvn spring-boot:run
 ```
-Backend server runs on `http://localhost:8080`
+Backend server runs on - `http://localhost:8080`
 
 ### 3. Frontend Setup
 ```bash
