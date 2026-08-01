@@ -27,19 +27,28 @@ ChartJS.register(
   Filler
 );
 
-const ProgressChart = ({ clientId }) => {
+const ProgressChart = ({ clientId, data: initialData }) => {
   const { user } = useAuth();
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(initialData || []);
+  const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (initialData) {
+      setData(initialData);
+      setLoading(false);
+      return;
+    }
+
+    if (!clientId) {
+      setLoading(false);
+      return;
+    }
+
     const fetchProgress = async () => {
-      if (!clientId) return;
       try {
         setLoading(true);
         setError(null);
-        // Pass trainerId as query param for Phase 2 dev configuration
         const response = await getClientProgress(clientId, user?.userId);
         if (response.data && Array.isArray(response.data)) {
           setData(response.data);
@@ -54,12 +63,12 @@ const ProgressChart = ({ clientId }) => {
     };
 
     fetchProgress();
-  }, [clientId, user?.userId]);
+  }, [clientId, user?.userId, initialData]);
 
   if (loading) {
     return (
       <div className="h-64 flex flex-col items-center justify-center gap-2">
-        <Spinner size="md" color="text-blue-600" />
+        <Spinner size="md" color="text-emerald-400" />
         <p className="text-xs text-slate-400 font-semibold animate-pulse">Loading progress chart...</p>
       </div>
     );
@@ -67,15 +76,15 @@ const ProgressChart = ({ clientId }) => {
 
   if (error) {
     return (
-      <div className="h-64 flex items-center justify-center p-4 border border-dashed border-red-100 bg-red-50/50 rounded-2xl">
-        <p className="text-xs font-semibold text-red-500 text-center">{error}</p>
+      <div className="h-64 flex items-center justify-center p-4 border border-dashed border-red-500/30 bg-red-500/10 rounded-2xl">
+        <p className="text-xs font-semibold text-red-400 text-center">{error}</p>
       </div>
     );
   }
 
-  if (data.length === 0) {
+  if (!data || data.length === 0) {
     return (
-      <div className="h-64 flex items-center justify-center p-4 border border-dashed border-slate-100 bg-slate-50/30 rounded-2xl text-center">
+      <div className="h-64 flex items-center justify-center p-4 border border-dashed border-slate-800 bg-slate-900/50 rounded-2xl text-center">
         <p className="text-sm font-semibold text-slate-400">No progress logged yet for this client.</p>
       </div>
     );
@@ -96,7 +105,7 @@ const ProgressChart = ({ clientId }) => {
 
   // Dynamic point colors based on completion: green >= 80%, amber 50-79%, red < 50%
   const getPointColor = (val) => {
-    if (val >= 80) return '#22C55E'; // green
+    if (val >= 80) return '#22C55E'; // emerald green
     if (val >= 50) return '#F59E0B'; // amber
     return '#EF4444'; // red
   };
@@ -109,19 +118,19 @@ const ProgressChart = ({ clientId }) => {
       {
         label: 'Completion %',
         data: completionRates,
-        borderColor: '#2563EB', // Brand Primary Blue
+        borderColor: '#22C55E', // Emerald Veda Green
         borderWidth: 3,
         tension: 0.4,
         fill: true,
         backgroundColor: (context) => {
           const ctx = context.chart.ctx;
-          const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-          gradient.addColorStop(0, 'rgba(37, 99, 235, 0.25)'); // Primary color at 25% opacity
-          gradient.addColorStop(1, 'rgba(37, 99, 235, 0.00)'); // Fade to transparent
+          const gradient = ctx.createLinearGradient(0, 0, 0, 260);
+          gradient.addColorStop(0, 'rgba(34, 197, 94, 0.35)'); // Veda green at 35% opacity
+          gradient.addColorStop(1, 'rgba(34, 197, 94, 0.00)'); // Fade to transparent
           return gradient;
         },
         pointBackgroundColor: pointBackgroundColors,
-        pointBorderColor: '#FFFFFF',
+        pointBorderColor: '#0F172A',
         pointBorderWidth: 2,
         pointRadius: 6,
         pointHoverRadius: 8,
@@ -137,15 +146,16 @@ const ProgressChart = ({ clientId }) => {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false // Hide legend to look cleaner
+        display: false
       },
       tooltip: {
-        backgroundColor: '#1E293B', // Slate 800 for premium tooltip
-        titleFont: { size: 12, weight: 'bold', family: 'Inter' },
-        bodyFont: { size: 12, family: 'Inter' },
+        backgroundColor: '#0F172A',
+        borderColor: '#1E293B',
+        borderWidth: 1,
+        titleFont: { size: 12, weight: 'bold', family: 'Plus Jakarta Sans' },
+        bodyFont: { size: 12, family: 'Plus Jakarta Sans' },
         padding: 12,
         cornerRadius: 12,
-        shadowColor: 'rgba(0, 0, 0, 0.1)',
         callbacks: {
           label: (context) => {
             const index = context.dataIndex;
@@ -171,8 +181,8 @@ const ProgressChart = ({ clientId }) => {
           display: false
         },
         ticks: {
-          font: { family: 'Inter', size: 10, weight: '500' },
-          color: '#64748B' // slate-500
+          font: { family: 'Plus Jakarta Sans', size: 10, weight: '600' },
+          color: '#94A3B8'
         }
       },
       y: {
@@ -180,12 +190,12 @@ const ProgressChart = ({ clientId }) => {
         max: 100,
         ticks: {
           stepSize: 20,
-          font: { family: 'Inter', size: 10, weight: '500' },
-          color: '#64748B',
+          font: { family: 'Plus Jakarta Sans', size: 10, weight: '600' },
+          color: '#94A3B8',
           callback: (value) => `${value}%`
         },
         grid: {
-          color: '#F1F5F9' // slate-100
+          color: '#1E293B'
         }
       }
     }

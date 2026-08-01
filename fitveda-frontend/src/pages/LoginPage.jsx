@@ -47,117 +47,87 @@ const LoginPage = () => {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#F8FAFC',
-      fontFamily: 'Inter, sans-serif',
-      padding: '1.5rem',
-    }}>
-      <div style={{
-        width: '100%',
-        maxWidth: '420px',
-        backgroundColor: '#fff',
-        borderRadius: '16px',
-        boxShadow: '0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01)',
-        padding: '2.5rem',
-        border: '1px solid #E2E8F0',
-      }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <h1 style={{ color: '#2563EB', fontSize: '2rem', margin: 0, fontWeight: 800 }}>FitVeda</h1>
-          <p style={{ color: '#64748B', marginTop: '0.5rem', fontSize: '0.95rem' }}>Welcome back! Log in to your account</p>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 relative overflow-hidden bg-radial-gradient">
+      
+      {/* Ambient Glow Orbs */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/15 blur-3xl rounded-full pointer-events-none animate-pulse-slow"></div>
+      <div className="absolute bottom-10 right-10 w-80 h-80 bg-green-600/10 blur-3xl rounded-full pointer-events-none"></div>
+
+      <div className="w-full max-w-md glass-card rounded-3xl p-8 sm:p-10 border border-slate-800/80 shadow-2xl relative z-10">
+        
+        {/* Brand Logo Header */}
+        <div className="text-center mb-8 flex flex-col items-center">
+          <div className="relative group mb-4">
+            <div className="absolute -inset-1.5 bg-gradient-to-r from-emerald-500 to-green-600 rounded-2xl blur opacity-50 group-hover:opacity-80 transition duration-300"></div>
+            <img 
+              src="/fitveda-logo.png" 
+              alt="FitVeda Logo" 
+              className="relative h-16 w-auto object-contain bg-white/95 p-1.5 rounded-2xl shadow-xl border border-white/20" 
+            />
+          </div>
+
+          <h1 className="text-3xl font-extrabold tracking-tight text-white m-0 flex items-center gap-1">
+            FIT<span className="text-emerald-500 bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent">VEDA</span>
+          </h1>
+          <p className="text-xs uppercase tracking-widest font-bold text-slate-400 mt-1">
+            Train Smart • Eat Right • Live Better
+          </p>
         </div>
 
-        {/* Inline Error Alert */}
+        {/* Error Alert */}
         {errorMsg && (
-          <div style={{
-            backgroundColor: '#FEF2F2',
-            border: '1px solid #FCA5A5',
-            color: '#991B1B',
-            padding: '0.75rem 1rem',
-            borderRadius: '8px',
-            fontSize: '0.875rem',
-            marginBottom: '1.5rem',
-          }}>
-            {errorMsg}
+          <div className="bg-red-500/10 border border-red-500/30 text-red-300 p-3.5 rounded-xl text-sm mb-6 flex items-center gap-2">
+            <svg className="w-5 h-5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{errorMsg}</span>
           </div>
         )}
 
         {/* Role Toggle Selector */}
-        <div style={{
-          display: 'flex',
-          backgroundColor: '#F1F5F9',
-          borderRadius: '10px',
-          padding: '4px',
-          marginBottom: '1.5rem',
-        }}>
+        <div className="flex bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800/80 mb-6">
           <button
             type="button"
             onClick={() => setSelectedRole('TRAINER')}
-            style={{
-              flex: 1,
-              padding: '0.6rem',
-              border: 'none',
-              borderRadius: '8px',
-              fontWeight: 600,
-              fontSize: '0.875rem',
-              cursor: 'pointer',
-              transition: 'all 200ms ease',
-              backgroundColor: selectedRole === 'TRAINER' ? '#fff' : 'transparent',
-              color: selectedRole === 'TRAINER' ? '#2563EB' : '#64748B',
-              boxShadow: selectedRole === 'TRAINER' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-            }}
+            className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 ${
+              selectedRole === 'TRAINER'
+                ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
           >
-            👨‍🏫 Trainer
+            <span>👨‍🏫 Trainer</span>
           </button>
+
           <button
             type="button"
             onClick={() => setSelectedRole('CLIENT')}
-            style={{
-              flex: 1,
-              padding: '0.6rem',
-              border: 'none',
-              borderRadius: '8px',
-              fontWeight: 600,
-              fontSize: '0.875rem',
-              cursor: 'pointer',
-              transition: 'all 200ms ease',
-              backgroundColor: selectedRole === 'CLIENT' ? '#fff' : 'transparent',
-              color: selectedRole === 'CLIENT' ? '#2563EB' : '#64748B',
-              boxShadow: selectedRole === 'CLIENT' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-            }}
+            className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 ${
+              selectedRole === 'CLIENT'
+                ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
           >
-            🏋️ Client
+            <span>🏋️ Client</span>
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
+            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
               Email Address
             </label>
             <input
               type="email"
               required
-              placeholder="e.g. user@fitveda.com"
+              placeholder="user@fitveda.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #CBD5E1',
-                borderRadius: '8px',
-                fontSize: '0.95rem',
-                outline: 'none',
-                boxSizing: 'border-box',
-              }}
+              className="w-full px-4 py-3 bg-slate-900/90 border border-slate-800 text-slate-100 rounded-xl text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200 placeholder:text-slate-500"
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#334155', marginBottom: '0.4rem' }}>
+            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
               Password
             </label>
             <input
@@ -166,44 +136,26 @@ const LoginPage = () => {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #CBD5E1',
-                borderRadius: '8px',
-                fontSize: '0.95rem',
-                outline: 'none',
-                boxSizing: 'border-box',
-              }}
+              className="w-full px-4 py-3 bg-slate-900/90 border border-slate-800 text-slate-100 rounded-xl text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200 placeholder:text-slate-500"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            style={{
-              padding: '0.85rem',
-              backgroundColor: '#2563EB',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '1rem',
-              fontWeight: 700,
-              cursor: loading ? 'not-allowed' : 'pointer',
-              marginTop: '0.5rem',
-              transition: 'background-color 200ms ease',
-            }}
+            className="w-full py-3.5 mt-2 bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-700 hover:from-emerald-500 hover:to-green-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50 text-sm tracking-wide"
           >
             {loading ? 'Logging in...' : `Log In as ${selectedRole}`}
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: '1.75rem', fontSize: '0.875rem', color: '#64748B' }}>
+        <div className="text-center mt-8 text-sm text-slate-400 font-medium">
           Don't have an account?{' '}
-          <Link to="/register" style={{ color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>
+          <Link to="/register" className="text-emerald-400 hover:text-emerald-300 font-bold underline underline-offset-4 transition-colors">
             Register here
           </Link>
         </div>
+
       </div>
     </div>
   );

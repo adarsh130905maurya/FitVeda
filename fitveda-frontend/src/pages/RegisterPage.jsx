@@ -8,238 +8,166 @@ const RegisterPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState('TRAINER'); // TRAINER | CLIENT
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
-
-    // Client-side validation
-    if (!name.trim()) {
-      setErrorMsg('Full Name is required');
-      return;
-    }
-
-    if (!email.includes('@') || !email.includes('.')) {
-      setErrorMsg('Please enter a valid email address');
-      return;
-    }
-
-    if (password.length < 8) {
-      setErrorMsg('Password must be at least 8 characters long');
-      return;
-    }
-
+    setSuccessMsg('');
     setLoading(true);
 
     try {
       await registerApi({ name, email, password, role });
-      alert('Registration successful! Please log in.');
-      navigate('/');
+      setSuccessMsg('Account created successfully! Redirecting to login...');
+      setTimeout(() => {
+        navigate('/');
+      }, 1500);
     } catch (err) {
       console.warn('Registration API error:', err);
       const backendError = err.response?.data?.error;
-      setErrorMsg(backendError || 'Registration failed. Email may already be registered.');
+      setErrorMsg(backendError || 'Failed to register account. Email might already be in use.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#F8FAFC',
-      fontFamily: 'Inter, sans-serif',
-      padding: '1.5rem',
-    }}>
-      <div style={{
-        width: '100%',
-        maxWidth: '460px',
-        backgroundColor: '#fff',
-        borderRadius: '16px',
-        boxShadow: '0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01)',
-        padding: '2.5rem',
-        border: '1px solid #E2E8F0',
-      }}>
-        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-          <h1 style={{ color: '#2563EB', fontSize: '2rem', margin: 0, fontWeight: 800 }}>FitVeda</h1>
-          <p style={{ color: '#64748B', marginTop: '0.5rem', fontSize: '0.95rem' }}>Create your account to get started</p>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 relative overflow-hidden bg-radial-gradient">
+      
+      {/* Ambient Glow Orbs */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/15 blur-3xl rounded-full pointer-events-none animate-pulse-slow"></div>
+      <div className="absolute bottom-10 left-10 w-80 h-80 bg-green-600/10 blur-3xl rounded-full pointer-events-none"></div>
+
+      <div className="w-full max-w-md glass-card rounded-3xl p-8 sm:p-10 border border-slate-800/80 shadow-2xl relative z-10">
+        
+        {/* Brand Logo Header */}
+        <div className="text-center mb-8 flex flex-col items-center">
+          <div className="relative group mb-4">
+            <div className="absolute -inset-1.5 bg-gradient-to-r from-emerald-500 to-green-600 rounded-2xl blur opacity-50 group-hover:opacity-80 transition duration-300"></div>
+            <img 
+              src="/fitveda-logo.png" 
+              alt="FitVeda Logo" 
+              className="relative h-16 w-auto object-contain bg-white/95 p-1.5 rounded-2xl shadow-xl border border-white/20" 
+            />
+          </div>
+
+          <h1 className="text-3xl font-extrabold tracking-tight text-white m-0 flex items-center gap-1">
+            FIT<span className="text-emerald-500 bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent">VEDA</span>
+          </h1>
+          <p className="text-xs uppercase tracking-widest font-bold text-slate-400 mt-1">
+            Create Your Account
+          </p>
         </div>
 
-        {/* Inline Error Alert */}
+        {/* Alerts */}
         {errorMsg && (
-          <div style={{
-            backgroundColor: '#FEF2F2',
-            border: '1px solid #FCA5A5',
-            color: '#991B1B',
-            padding: '0.75rem 1rem',
-            borderRadius: '8px',
-            fontSize: '0.875rem',
-            marginBottom: '1.25rem',
-          }}>
-            {errorMsg}
+          <div className="bg-red-500/10 border border-red-500/30 text-red-300 p-3.5 rounded-xl text-sm mb-6 flex items-center gap-2">
+            <svg className="w-5 h-5 text-red-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{errorMsg}</span>
           </div>
         )}
 
-        {/* Client Role Info Banner */}
-        {role === 'CLIENT' && (
-          <div style={{
-            backgroundColor: '#EFF6FF',
-            border: '1px solid #BFDBFE',
-            color: '#1E40AF',
-            padding: '0.75rem 1rem',
-            borderRadius: '8px',
-            fontSize: '0.85rem',
-            marginBottom: '1.25rem',
-          }}>
-            💡 <strong>Note for Clients:</strong> After registering, ask your trainer to create and assign a fitness plan to your account.
+        {successMsg && (
+          <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 p-3.5 rounded-xl text-sm mb-6 flex items-center gap-2">
+            <svg className="w-5 h-5 text-emerald-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            <span>{successMsg}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
-          <div>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
-              Account Type *
-            </label>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <label style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 0.8rem', border: '1px solid #CBD5E1', borderRadius: '8px', cursor: 'pointer' }}>
-                <input
-                  type="radio"
-                  name="role"
-                  value="TRAINER"
-                  checked={role === 'TRAINER'}
-                  onChange={() => setRole('TRAINER')}
-                />
-                <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Trainer</span>
-              </label>
-              <label style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 0.8rem', border: '1px solid #CBD5E1', borderRadius: '8px', cursor: 'pointer' }}>
-                <input
-                  type="radio"
-                  name="role"
-                  value="CLIENT"
-                  checked={role === 'CLIENT'}
-                  onChange={() => setRole('CLIENT')}
-                />
-                <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Client</span>
-              </label>
-            </div>
-          </div>
+        {/* Role Toggle Selector */}
+        <div className="flex bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800/80 mb-6">
+          <button
+            type="button"
+            onClick={() => setRole('TRAINER')}
+            className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 ${
+              role === 'TRAINER'
+                ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <span>👨‍🏫 Trainer</span>
+          </button>
 
+          <button
+            type="button"
+            onClick={() => setRole('CLIENT')}
+            className={`flex-1 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 ${
+              role === 'CLIENT'
+                ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <span>🏋️ Client</span>
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
-              Full Name *
+            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+              Full Name
             </label>
             <input
               type="text"
               required
-              placeholder="e.g. Priya Manna"
+              placeholder="e.g. Adarsh Maurya"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.7rem',
-                border: '1px solid #CBD5E1',
-                borderRadius: '8px',
-                fontSize: '0.95rem',
-                boxSizing: 'border-box',
-              }}
+              className="w-full px-4 py-3 bg-slate-900/90 border border-slate-800 text-slate-100 rounded-xl text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200 placeholder:text-slate-500"
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
-              Email Address *
+            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+              Email Address
             </label>
             <input
               type="email"
               required
-              placeholder="e.g. priya@fitveda.com"
+              placeholder="user@fitveda.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.7rem',
-                border: '1px solid #CBD5E1',
-                borderRadius: '8px',
-                fontSize: '0.95rem',
-                boxSizing: 'border-box',
-              }}
+              className="w-full px-4 py-3 bg-slate-900/90 border border-slate-800 text-slate-100 rounded-xl text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200 placeholder:text-slate-500"
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
-              Password (min 8 characters) *
+            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+              Password
             </label>
-            <div style={{ position: 'relative' }}>
-              <input
-                type={showPassword ? 'text' : 'password'}
-                required
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.7rem',
-                  paddingRight: '2.5rem',
-                  border: '1px solid #CBD5E1',
-                  borderRadius: '8px',
-                  fontSize: '0.95rem',
-                  boxSizing: 'border-box',
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                style={{
-                  position: 'absolute',
-                  right: '0.75rem',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'none',
-                  border: 'none',
-                  color: '#64748B',
-                  cursor: 'pointer',
-                  fontSize: '0.8rem',
-                }}
-              >
-                {showPassword ? 'Hide' : 'Show'}
-              </button>
-            </div>
+            <input
+              type="password"
+              required
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-3 bg-slate-900/90 border border-slate-800 text-slate-100 rounded-xl text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all duration-200 placeholder:text-slate-500"
+            />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            style={{
-              padding: '0.85rem',
-              backgroundColor: '#2563EB',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '1rem',
-              fontWeight: 700,
-              cursor: loading ? 'not-allowed' : 'pointer',
-              marginTop: '0.5rem',
-            }}
+            className="w-full py-3.5 mt-3 bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-700 hover:from-emerald-500 hover:to-green-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition-all duration-200 active:scale-[0.98] cursor-pointer disabled:opacity-50 text-sm tracking-wide"
           >
-            {loading ? 'Creating Account...' : 'Create Account'}
+            {loading ? 'Creating Account...' : `Register as ${role}`}
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: '#64748B' }}>
-          Already registered?{' '}
-          <Link to="/" style={{ color: '#2563EB', fontWeight: 600, textDecoration: 'none' }}>
+        <div className="text-center mt-8 text-sm text-slate-400 font-medium">
+          Already have an account?{' '}
+          <Link to="/" className="text-emerald-400 hover:text-emerald-300 font-bold underline underline-offset-4 transition-colors">
             Log in here
           </Link>
         </div>
+
       </div>
     </div>
   );
