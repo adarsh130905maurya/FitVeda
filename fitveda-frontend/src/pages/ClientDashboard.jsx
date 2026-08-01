@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import NavBar from '../components/ui/NavBar';
 import { getMyPlan, submitProgress } from '../services/api';
 import { mockClientPlan } from '../utils/mockData';
 import { formatDate, getTodayDateString } from '../utils/helpers';
 
 const ClientDashboard = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   const [activePlan, setActivePlan] = useState(null);
   const [loadingPlan, setLoadingPlan] = useState(false);
@@ -99,8 +100,10 @@ const ClientDashboard = () => {
   const diets = activePlan?.exercises?.filter((ex) => ex.type === 'DIET') || [];
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem', fontFamily: 'Inter, sans-serif' }}>
-      {/* Toast Alert */}
+    <div style={{ backgroundColor: '#F8FAFC', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
+      <NavBar userName={user?.name || 'Client'} onLogout={logout} />
+      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
+        {/* Toast Alert */}
       {toast && (
         <div style={{
           padding: '1rem',
@@ -267,6 +270,7 @@ const ClientDashboard = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

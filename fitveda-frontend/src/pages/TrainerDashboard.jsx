@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import NavBar from '../components/ui/NavBar';
 import { getClients, createPlan, addExercise, assignClient, getClientProgress } from '../services/api';
 import { mockTrainerClients } from '../utils/mockData';
 
 const TrainerDashboard = () => {
+  const { user, logout } = useAuth();
+
   // Clients state
   const [clients, setClients] = useState([]);
   const [loadingClients, setLoadingClients] = useState(false);
@@ -147,8 +151,10 @@ const TrainerDashboard = () => {
   };
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem', fontFamily: 'Inter, sans-serif' }}>
-      {/* Toast Alert */}
+    <div style={{ backgroundColor: '#F8FAFC', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
+      <NavBar userName={user?.name || 'Trainer'} onLogout={logout} />
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
+        {/* Toast Alert */}
       {toast && (
         <div style={{
           padding: '1rem',
@@ -453,7 +459,8 @@ const TrainerDashboard = () => {
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default TrainerDashboard;

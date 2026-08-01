@@ -147,12 +147,7 @@ public class PlanService {
     }
 
     public List<ClientResponse> getClientsForTrainer(Long trainerId) {
-        List<Plan> plans = planRepository.findByTrainerId(trainerId);
-        Set<User> clients = plans.stream()
-                .map(Plan::getClient)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-
+        List<User> clients = userRepository.findByRole(Role.CLIENT);
         return clients.stream()
                 .map(c -> new ClientResponse(c.getId(), c.getName(), c.getEmail()))
                 .collect(Collectors.toList());
