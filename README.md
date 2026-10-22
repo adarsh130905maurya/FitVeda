@@ -2,6 +2,8 @@
 
 FitVeda is a modern full-stack web application designed for personal trainers to create customized multi-day workout and diet plans, assign them to clients, and monitor real-time client progress analytics.
 
+---
+
 ## 🚀 Key Features
 
 ### 👨‍🏫 Trainer Features
@@ -19,7 +21,7 @@ FitVeda is a modern full-stack web application designed for personal trainers to
 
 ## 🛠️ Technology Stack
 - **Backend**: Java 17+, Spring Boot 3.3.2, Spring Data JPA, Spring Security, JJWT (0.11.5), Bucket4j (8.10.1)
-- **Database**: PostgreSQL (Docker container on port 5432)
+- **Database**: PostgreSQL 15+ (Docker container on port 5432)
 - **Frontend**: React 19, Vite 8, Tailwind CSS v3, React Router v7, Axios, Chart.js
 - **Authentication**: Stateless JWT Bearer Authentication with BCrypt Password Hashing
 - **Rate Limiting**: IP-based rate limiting on Auth (10 req/hr) and REST APIs (60 req/min)
@@ -28,10 +30,12 @@ FitVeda is a modern full-stack web application designed for personal trainers to
 
 ## 💻 Local Setup & Execution Guide
 
+> 📄 **Quick Start Plaintext Guide**: For an offline text guide with detailed prerequisite download links and evaluation testing walkthrough, see [HOW_TO_RUN.txt](HOW_TO_RUN.txt).
+
 ### Prerequisites
 - Java 17 or higher & Maven
 - Node.js (v18+) & npm
-- Docker Desktop
+- Docker Desktop or PostgreSQL 15+
 
 ### 1. Database Setup
 ```bash
@@ -43,7 +47,7 @@ docker run -d --name fitveda-postgres -e POSTGRES_DB=fitveda_db -e POSTGRES_PASS
 cd fitveda-backend
 mvn spring-boot:run
 ```
-Backend server runs on - `http://localhost:8080`
+Backend server runs on `http://localhost:8080`
 
 ### 3. Frontend Setup
 ```bash

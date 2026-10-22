@@ -1,0 +1,184 @@
+================================================================================
+           FITVEDA - PROJECT EXECUTION GUIDE & PREREQUISITES
+================================================================================
+Project Name  : FitVeda (Train Smart • Eat Right • Live Better)
+Architecture  : Full-Stack Web Application (Stateless JWT REST API + SPA)
+Backend Stack : Java 17+, Spring Boot 3.3.2, Spring Security, JPA / Hibernate, Bucket4j
+Frontend Stack: React 19, Vite 8, Tailwind CSS v3, React Router v7, Axios, Chart.js
+Database      : PostgreSQL 15+ (Docker / Native)
+
+================================================================================
+SECTION 1: PREREQUISITES (WHAT TO DOWNLOAD BEFORE RUNNING)
+================================================================================
+
+Make sure the following software tools are installed on your computer before
+running the project:
+
+1. JAVA DEVELOPMENT KIT (JDK 17 or higher)
+   - Why: Required to compile and run the Spring Boot backend server.
+   - Recommended: Eclipse Temurin JDK 17 (LTS) or JDK 21 (LTS)
+   - Download URL: https://adoptium.net/
+   - Verification command (Terminal / PowerShell / CMD):
+       java -version
+     (Ensure output states java version "17.x.x" or higher)
+
+2. APACHE MAVEN (Version 3.8 or higher)
+   - Why: Required to build and package backend dependencies and execute Spring Boot.
+   - Download URL: https://maven.apache.org/download.cgi
+   - Note: If using an IDE like IntelliJ IDEA or Eclipse, Maven is pre-bundled.
+   - Verification command:
+       mvn -version
+
+3. NODE.JS (Version 18.x or 20.x LTS) & NPM
+   - Why: Required to install frontend dependencies and run the Vite dev server.
+   - Download URL: https://nodejs.org/ (Download the LTS version)
+   - Verification commands:
+       node -v
+       npm -v
+     (Node should be v18+ and npm v9+)
+
+4. POSTGRESQL DATABASE (Choose Option A or Option B)
+   
+   OPTION A: Docker Desktop (Recommended - Simplest & Fastest)
+   - Download URL: https://www.docker.com/products/docker-desktop/
+   - Make sure Docker Desktop is installed and running.
+   
+   OPTION B: Native PostgreSQL Installer
+   - Download URL: https://www.postgresql.org/download/
+   - Install with default port 5432, username 'postgres', password 'postgres'.
+   - Create an empty database named 'fitveda_db'.
+
+5. MODERN WEB BROWSER
+   - Google Chrome, Microsoft Edge, Brave, or Mozilla Firefox.
+
+================================================================================
+SECTION 2: STEP-BY-STEP GUIDE TO RUN FITVEDA
+================================================================================
+
+--------------------------------------------------------------------------------
+STEP 1: START THE POSTGRESQL DATABASE
+--------------------------------------------------------------------------------
+If you are using Docker Desktop (Recommended):
+Open a terminal / PowerShell window and run:
+
+    docker run -d --name fitveda-postgres -e POSTGRES_DB=fitveda_db -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres:latest
+
+If the container already exists from earlier, simply start it:
+    docker start fitveda-postgres
+
+If you are using Native PostgreSQL:
+1. Ensure the PostgreSQL service is running on port 5432.
+2. Open pgAdmin or psql and create the database if not already created:
+       CREATE DATABASE fitveda_db;
+3. Default credentials expected by backend (in application.properties):
+   - URL: jdbc:postgresql://localhost:5432/fitveda_db
+   - Username: postgres
+   - Password: postgres
+
+--------------------------------------------------------------------------------
+STEP 2: START THE SPRING BOOT BACKEND SERVER
+--------------------------------------------------------------------------------
+1. Open a new terminal / command prompt.
+2. Navigate to the backend directory:
+       cd fitveda-backend
+3. Run the Spring Boot application using Maven:
+       mvn spring-boot:run
+   
+   (Alternative: Open the 'fitveda-backend' folder in IntelliJ IDEA / Eclipse
+   and run the main application class: FitvedaBackendApplication.java)
+
+4. Wait until the terminal displays:
+       "Started FitvedaBackendApplication in X.XXX seconds"
+   
+   The backend API is now live at:
+       http://localhost:8080
+
+--------------------------------------------------------------------------------
+STEP 3: START THE REACT FRONTEND APPLICATION
+--------------------------------------------------------------------------------
+1. Open a separate terminal / command prompt.
+2. Navigate to the frontend directory:
+       cd fitveda-frontend
+3. Install frontend dependencies (only needed the first time):
+       npm install
+4. Start the Vite development server:
+       npm run dev
+5. The terminal will display the local URL:
+       ➜  Local:   http://localhost:5173/
+
+--------------------------------------------------------------------------------
+STEP 4: OPEN AND USE THE APPLICATION
+--------------------------------------------------------------------------------
+1. Open your browser and go to:
+       http://localhost:5173
+
+2. The FitVeda Dark Ambient Glassmorphic login portal will appear!
+
+================================================================================
+SECTION 3: EVALUATION & TESTING DEMO WALKTHROUGH
+================================================================================
+
+To test the entire full-stack workflow during evaluation, follow these steps:
+
+FLOW A: REGISTER & TEST TRAINER ACCOUNT
+1. On the login screen (http://localhost:5173), click "Register here".
+2. Select the "👨‍🏫 Trainer" role pill.
+3. Enter Full Name (e.g., "Coach Vikram"), Email ("trainer@fitveda.com"), and Password ("password123").
+4. Click "Register as TRAINER". You will be redirected to the login page.
+5. Log in with the registered trainer credentials.
+6. Inside the Trainer Dashboard:
+   - View high-level metric cards (Registered Clients, Active Routines, Completion Rate, System Security).
+   - In the "Plan Wizard" on the right side:
+       Step 1: Enter Plan Name (e.g., "4-Week Strength & Cutting"), Start Date, End Date, and assign to a client.
+       Step 2: Add exercises and diet meals with sets, reps, and day numbers.
+       Step 3: Review summary and click "Create & Assign Plan".
+   - View client progress analytics in the interactive Chart.js section.
+
+FLOW B: REGISTER & TEST CLIENT ACCOUNT
+1. Log out or open a private/incognito browser window at http://localhost:5173.
+2. Click "Register here", select the "🏋️ Client" role pill.
+3. Enter Full Name (e.g., "Rahul Sharma"), Email ("client@fitveda.com"), and Password ("password123").
+4. Click "Register as CLIENT", then log in.
+5. Inside the Client Dashboard:
+   - View the active personalized plan assigned by the trainer.
+   - Interactive checklist for Workout Routine and Diet & Nutrition.
+   - Check off exercises/meals as completed, add custom workout notes (e.g., "25kg dumbbell used").
+   - Click "Submit Progress" to record daily completion logs.
+
+FLOW C: VERIFY ANALYTICS ON TRAINER DASHBOARD
+1. Return to the Trainer Dashboard.
+2. Click "Progress" on the client's card.
+3. The interactive Emerald Chart.js graph dynamically updates showing the client's daily completion percentage!
+
+================================================================================
+SECTION 4: TROUBLESHOOTING & COMMON FIXES
+================================================================================
+
+1. Problem: "PSQLException: Connection to localhost:5432 refused"
+   Solution: PostgreSQL is not running. Start Docker container via:
+             docker start fitveda-postgres
+             Or verify native PostgreSQL Windows service is running.
+
+2. Problem: "Port 8080 is already in use"
+   Solution: Another process is using port 8080. Kill it in PowerShell via:
+             Get-Process -Id (Get-NetTCPConnection -LocalPort 8080).OwningProcess | Stop-Process -Force
+
+3. Problem: "Port 5173 is already in use"
+   Solution: Vite will automatically suggest port 5174, or kill the process on 5173.
+
+4. Rate Limiting Protection:
+   - FitVeda includes built-in Bucket4j IP rate limiting:
+       Auth endpoints: Max 10 requests / hour per IP.
+       API endpoints : Max 60 requests / minute per IP.
+   - If you encounter HTTP 429 Too Many Requests during rapid testing, wait 60 seconds.
+
+================================================================================
+SECTION 5: PROJECT TEAM & CREDITS
+================================================================================
+- Adarsh Maurya : Backend Engineer (Spring Boot, Spring Security JWT, PostgreSQL, Bucket4j)
+- Priya Manna   : Frontend Engineer (React 19 Architecture, Context API, Protected Routes, Axios)
+- Pari Marathe  : UI/UX Engineer (Tailwind CSS, Glassmorphism Design System, Chart.js Analytics)
+
+GitHub Repository: https://github.com/adarsh130905maurya/FitVeda.git
+Default Branch   : main
+================================================================================
