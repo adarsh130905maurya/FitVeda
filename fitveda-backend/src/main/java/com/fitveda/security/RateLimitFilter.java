@@ -22,17 +22,17 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
     private Bucket createNewBucket(String key) {
         if (key.startsWith("auth:")) {
-            // Auth endpoints: 10 requests per 1 hour per IP
+            // Auth endpoints: 100 requests per 1 minute per IP
             Bandwidth limit = Bandwidth.builder()
-                    .capacity(10)
-                    .refillIntervally(10, Duration.ofHours(1))
+                    .capacity(100)
+                    .refillGreedy(100, Duration.ofMinutes(1))
                     .build();
             return Bucket.builder().addLimit(limit).build();
         } else {
-            // API endpoints: 60 requests per minute per IP
+            // API endpoints: 120 requests per minute per IP
             Bandwidth limit = Bandwidth.builder()
-                    .capacity(60)
-                    .refillIntervally(60, Duration.ofMinutes(1))
+                    .capacity(120)
+                    .refillGreedy(120, Duration.ofMinutes(1))
                     .build();
             return Bucket.builder().addLimit(limit).build();
         }

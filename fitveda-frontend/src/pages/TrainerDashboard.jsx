@@ -72,10 +72,7 @@ const TrainerDashboard = () => {
       setClientProgressData(response.data || []);
     } catch (err) {
       console.warn('Progress fetch failed:', err);
-      setClientProgressData([
-        { date: '2026-08-01', totalExercises: 3, completedCount: 3, completionPercent: 100 },
-        { date: '2026-08-02', totalExercises: 3, completedCount: 2, completionPercent: 67 },
-      ]);
+      setClientProgressData([]);
     } finally {
       setLoadingProgress(false);
     }

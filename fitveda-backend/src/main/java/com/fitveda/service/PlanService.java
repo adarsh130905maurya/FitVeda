@@ -131,9 +131,12 @@ public class PlanService {
         Plan plan = activePlanOpt.get();
         int currentDayNumber = (int) ChronoUnit.DAYS.between(plan.getStartDate(), today) + 1;
 
-        List<ExerciseResponse> todayExercises = plan.getExercises().stream()
-                .filter(e -> e.getDayNumber() == currentDayNumber)
+        List<ExerciseResponse> allExercises = plan.getExercises().stream()
                 .map(e -> new ExerciseResponse(e.getId(), e.getDayNumber(), e.getType(), e.getName(), e.getSets(), e.getReps()))
+                .collect(Collectors.toList());
+
+        List<ExerciseResponse> todayExercises = allExercises.stream()
+                .filter(e -> e.getDayNumber() == currentDayNumber)
                 .collect(Collectors.toList());
 
         response.put("id", plan.getId());
@@ -142,6 +145,7 @@ public class PlanService {
         response.put("endDate", plan.getEndDate());
         response.put("currentDayNumber", currentDayNumber);
         response.put("exercises", todayExercises);
+        response.put("allExercises", allExercises);
 
         return response;
     }

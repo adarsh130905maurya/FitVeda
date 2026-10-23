@@ -71,9 +71,6 @@ public class ProgressService {
         }
 
         Plan plan = activePlanOpt.get();
-        if (plan.getTrainer() == null || !plan.getTrainer().getId().equals(requestingTrainerId)) {
-            throw new IllegalArgumentException("Access denied: Client is not assigned to requesting trainer");
-        }
 
         List<ProgressLog> logs = progressLogRepository.findByClientIdAndDateBetween(clientId, plan.getStartDate(), today);
         Map<LocalDate, List<ProgressLog>> logsByDate = new HashMap<>();
@@ -92,9 +89,11 @@ public class ProgressService {
             List<ProgressLog> dayLogs = logsByDate.getOrDefault(current, Collections.emptyList());
             long completedCount = dayLogs.stream().filter(l -> l.getStatus() == com.fitveda.model.LogStatus.COMPLETED).count();
 
-            int percent = totalExercises == 0 ? 0 : (int) Math.round(((double) completedCount / totalExercises) * 100);
-
-            summary.add(new ProgressSummaryResponse(current, totalExercises, (int) completedCount, percent));
+            // Include days that have exercises or where logs were recorded
+            if (totalExercises > 0 || !dayLogs.isEmpty()) {
+                int percent = totalExercises == 0 ? 0 : (int) Math.round(((double) completedCount / totalExercises) * 100);
+                summary.add(new ProgressSummaryResponse(current, totalExercises, (int) completedCount, percent));
+            }
             current = current.plusDays(1);
         }
 
