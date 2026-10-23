@@ -1,5 +1,6 @@
 package com.fitveda.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ public class Exercise {
     @NotBlank
     public String reps;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "plan_id")
     public Plan plan;

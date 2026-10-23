@@ -26,7 +26,27 @@ FitVeda is a modern full-stack web application designed for personal trainers to
 
 ---
 
-## 💻 Local Setup & Execution Guide
+## ⚡ 1-Click Fast Start
+
+### 🪟 Windows Users:
+Simply double-click **`start.bat`** in the project root!
+- Automatically checks Java, Node, npm, and PostgreSQL
+- Automatically starts backend, frontend, and frees busy ports
+- Automatically opens `http://localhost:5173` in your browser
+- To stop everything, double-click **`stop.bat`**
+
+### 🍎 macOS & Linux Users:
+```bash
+./start.sh
+```
+To stop everything:
+```bash
+./stop.sh
+```
+
+---
+
+## 💻 Manual Setup & Execution Guide
 
 ### Prerequisites
 - Java 17 or higher & Maven

@@ -141,7 +141,7 @@ const ClientDashboard = () => {
         {/* Active Plan Overview */}
         {loadingPlan ? (
           <div className="py-12 text-center text-slate-400 text-sm animate-pulse">Loading your personalized active plan...</div>
-        ) : !activePlan ? (
+        ) : !activePlan?.id ? (
           <div className="glass-card rounded-3xl p-12 text-center border border-slate-800">
             <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 border border-slate-800">
               🏋️‍♂️

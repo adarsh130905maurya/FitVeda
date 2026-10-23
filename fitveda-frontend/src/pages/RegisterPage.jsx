@@ -28,8 +28,14 @@ const RegisterPage = () => {
       }, 1500);
     } catch (err) {
       console.warn('Registration API error:', err);
-      const backendError = err.response?.data?.error;
-      setErrorMsg(backendError || 'Failed to register account. Email might already be in use.');
+      const backendDetails = err.response?.data?.details;
+      if (backendDetails && typeof backendDetails === 'object') {
+        const messages = Object.values(backendDetails).join('. ');
+        setErrorMsg(messages);
+      } else {
+        const backendError = err.response?.data?.error;
+        setErrorMsg(backendError || 'Failed to register account. Email might already be in use.');
+      }
     } finally {
       setLoading(false);
     }
@@ -139,12 +145,16 @@ const RegisterPage = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
-              Password
-            </label>
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                Password
+              </label>
+              <span className="text-[11px] text-slate-400 font-medium">(Min. 8 characters)</span>
+            </div>
             <input
               type="password"
               required
+              minLength={8}
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

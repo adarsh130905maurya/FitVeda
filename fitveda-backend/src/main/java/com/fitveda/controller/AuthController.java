@@ -33,4 +33,10 @@ public class AuthController {
         AuthResponse response = userService.loginUser(request);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Map<String, String>> resetPassword(@Valid @RequestBody com.fitveda.dto.ResetPasswordRequest request) {
+        userService.resetPassword(request);
+        return ResponseEntity.ok(Map.of("message", "Password has been reset successfully. Please log in with your new password."));
+    }
 }

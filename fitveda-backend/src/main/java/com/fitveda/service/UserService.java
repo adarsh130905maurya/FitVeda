@@ -51,4 +51,12 @@ public class UserService {
                 user.getName()
         );
     }
+
+    public void resetPassword(com.fitveda.dto.ResetPasswordRequest req) {
+        User user = userRepository.findByEmail(req.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("No account registered with this email address"));
+
+        user.setPassword(passwordEncoder.encode(req.getNewPassword()));
+        userRepository.save(user);
+    }
 }

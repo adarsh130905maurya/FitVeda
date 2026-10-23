@@ -1,5 +1,6 @@
 package com.fitveda.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class ProgressLog {
 
     public String notes;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "client_id")
     public User client;

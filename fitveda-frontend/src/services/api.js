@@ -50,6 +50,7 @@ const getActiveUserId = (fallbackId = 1) => {
 // ==================== AUTH API ====================
 export const register = (data) => api.post('/auth/register', data);
 export const login = (data) => api.post('/auth/login', data);
+export const resetPassword = (data) => api.post('/auth/reset-password', data);
 
 // ==================== TRAINER PLAN & CLIENT API ====================
 export const createPlan = (data, trainerId = getActiveUserId(1)) =>
